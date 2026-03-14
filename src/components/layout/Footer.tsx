@@ -10,8 +10,8 @@ export default function Footer() {
           {/* Brand Col */}
           <div className="col-span-1 sm:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded bg-gradient-to-br from-electric-400 to-electric-600 flex items-center justify-center text-white font-heading font-bold text-lg">
-                P
+              <div className="h-8 px-2 min-w-[32px] rounded bg-gradient-to-br from-electric-400 to-electric-600 flex items-center justify-center text-white font-heading font-bold text-sm tracking-wider">
+                PWJ
               </div>
               <span className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-white">
                 Purewave<span className="text-electric-400">Josh</span>

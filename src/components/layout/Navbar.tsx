@@ -45,8 +45,8 @@ export default function Navbar() {
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="w-8 h-8 rounded bg-gradient-to-br from-electric-400 to-electric-600 flex items-center justify-center text-white font-heading font-bold text-lg shadow-lg group-hover:scale-105 transition-transform">
-            P
+          <div className="h-8 px-2 min-w-[32px] rounded bg-gradient-to-br from-electric-400 to-electric-600 flex items-center justify-center text-white font-heading font-bold text-sm shadow-lg group-hover:scale-105 transition-transform tracking-wider">
+            PWJ
           </div>
           <span className={cn(
             "font-heading font-bold text-lg sm:text-xl tracking-tight transition-colors",
