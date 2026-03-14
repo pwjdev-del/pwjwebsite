@@ -1,0 +1,42 @@
+import { MetadataRoute } from 'next';
+import { features } from '@/data/features';
+import { industries } from '@/data/industries';
+import { siteConfig } from '@/data/seo';
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const baseUrl = siteConfig.url;
+
+  // Root and static routes
+  const staticRoutes = [
+    '',
+    '/about',
+    '/contact',
+    '/open-claw',
+    '/hipaa',
+    '/privacy',
+    '/terms',
+  ].map((route) => ({
+    url: `${baseUrl}${route}`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: 'weekly' as const,
+    priority: route === '' ? 1 : 0.8,
+  }));
+
+  // Dynamic Service routes
+  const serviceRoutes = features.map((feature) => ({
+    url: `${baseUrl}/services/${feature.id}`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.9,
+  }));
+
+  // Dynamic Industry routes
+  const industryRoutes = industries.map((industry) => ({
+    url: `${baseUrl}/industries/${industry.id}`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.9,
+  }));
+
+  return [...staticRoutes, ...serviceRoutes, ...industryRoutes];
+}

@@ -1,0 +1,10 @@
+export const metadata = { title: "Privacy Policy | Purewave Josh LLC" };
+
+export default function PrivacyPage() {
+  return (
+    <div className="container mx-auto px-6 py-24 max-w-4xl text-center min-h-[60vh] flex flex-col items-center justify-center">
+      <h1 className="text-4xl md:text-5xl font-heading font-black text-navy-900 mb-6 tracking-tight">Privacy Policy</h1>
+      <p className="text-lg text-navy-700">We take your privacy seriously. All data is processed securely with end-to-end encryption.</p>
+    </div>
+  );
+}
