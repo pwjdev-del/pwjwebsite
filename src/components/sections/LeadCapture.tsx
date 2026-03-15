@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Send, CheckCircle2, Loader2, Mail, Phone, UploadCloud, FileType, ChevronDown, X } from "lucide-react";
 import { FadeInStagger, FadeInItem } from "@/components/animations/FadeIn";
@@ -8,34 +8,25 @@ import { features } from "@/data/features";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { type ISourceOptions } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
-import { useDeviceCapability } from "@/hooks/useDeviceCapability";
 
 function ContactParticles() {
   const [init, setInit] = useState(false);
-  const { isMobile, isTablet, particleScale, prefersReducedMotion } = useDeviceCapability();
 
   useEffect(() => {
-    if (prefersReducedMotion) return;
     initParticlesEngine(async (engine) => {
       await loadSlim(engine);
     }).then(() => {
       setInit(true);
     });
-  }, [prefersReducedMotion]);
+  }, []);
 
-  const scaledCount = useMemo(() => {
-    if (isMobile) return 30;
-    if (isTablet) return 60;
-    return 120;
-  }, [isMobile, isTablet]);
-
-  const options: ISourceOptions = useMemo(() => ({
+  const options: ISourceOptions = {
     background: { color: { value: "transparent" } },
-    fpsLimit: isMobile ? 30 : 120,
+    fpsLimit: 120,
     interactivity: {
-      detectsOn: "window" as const,
+      detectsOn: "window",
       events: {
-        onHover: { enable: !isMobile, mode: ["grab", "bubble"] },
+        onHover: { enable: true, mode: ["grab", "bubble"] },
       },
       modes: {
         grab: { distance: 140, links: { opacity: 0.8 } },
@@ -44,17 +35,17 @@ function ContactParticles() {
     },
     particles: {
       color: { value: ["#ffffff", "#60a5fa", "#3b82f6", "#93c5fd"] },
-      links: { color: "#ffffff", distance: isMobile ? 100 : 150, enable: true, opacity: 0.5, width: 1.5 },
-      move: { enable: true, speed: isMobile ? 1 : 2, direction: "none" as const, random: false, straight: false, outModes: "bounce" as const },
-      number: { density: { enable: true }, value: scaledCount },
-      opacity: { value: { min: 0.3, max: 0.8 }, animation: { enable: !isMobile, speed: 1.5, sync: false } },
+      links: { color: "#ffffff", distance: 150, enable: true, opacity: 0.5, width: 1.5 },
+      move: { enable: true, speed: 2, direction: "none", random: false, straight: false, outModes: "bounce" },
+      number: { density: { enable: true }, value: 120 },
+      opacity: { value: { min: 0.3, max: 0.8 }, animation: { enable: true, speed: 1.5, sync: false } },
       shape: { type: "circle" },
-      size: { value: { min: 2, max: isMobile ? 4 : 6 } },
+      size: { value: { min: 2, max: 6 } },
     },
     detectRetina: true,
-  }), [isMobile, scaledCount]);
+  };
 
-  if (!init || prefersReducedMotion) return null;
+  if (!init) return null;
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden mix-blend-screen pointer-events-none">

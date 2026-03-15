@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { features } from "@/data/features";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Helper to group features by category for the mega menu
 const categorizedFeatures = features.reduce((acc, feature) => {
   const cat = feature.category || "Other";
   if (!acc[cat]) {
@@ -37,18 +38,21 @@ export default function Navbar() {
       className={cn(
         "fixed top-0 w-full z-50 transition-all duration-300",
         isScrolled
-          ? "bg-obsidian-900/95 backdrop-blur-md border-b border-white/[0.06] py-4 shadow-lg shadow-black/20"
-          : "bg-transparent py-6"
+          ? "bg-white/95 backdrop-blur-md border-b border-navy-900/10 py-4 shadow-sm"
+          : "bg-white/90 backdrop-blur-sm py-6"
       )}
     >
       <div className="container mx-auto px-4 sm:px-6 max-w-7xl flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <div className="h-8 px-2 min-w-[32px] rounded bg-gradient-to-br from-magenta-400 to-magenta-600 flex items-center justify-center text-white font-heading font-bold text-sm shadow-lg group-hover:scale-105 transition-transform tracking-wider">
+          <div className="h-8 px-2 min-w-[32px] rounded bg-gradient-to-br from-electric-400 to-electric-600 flex items-center justify-center text-white font-heading font-bold text-sm shadow-lg group-hover:scale-105 transition-transform tracking-wider">
             PWJ
           </div>
-          <span className="font-heading font-bold text-lg sm:text-xl tracking-tight text-white">
-            Purewave<span className="text-magenta-400">Josh</span>
+          <span className={cn(
+            "font-heading font-bold text-lg sm:text-xl tracking-tight transition-colors",
+            isScrolled ? "text-navy-900" : "text-navy-900"
+          )}>
+            Purewave<span className="text-electric-500">Josh</span>
           </span>
         </Link>
 
@@ -59,18 +63,21 @@ export default function Navbar() {
           <div className="group">
             <Link
               href="/#services"
-              className="flex items-center gap-1.5 text-sm font-medium transition-colors text-navy-200 hover:text-white py-6"
+              className={cn(
+                "flex items-center gap-1.5 text-sm font-medium transition-colors hover:text-electric-500 py-6",
+                isScrolled ? "text-navy-800" : "text-navy-800"
+              )}
             >
               Solutions <ChevronDown className="w-4 h-4 opacity-70 group-hover:rotate-180 transition-transform duration-300" />
             </Link>
             
             {/* Mega Menu Dropdown */}
-            <div className="absolute top-[100%] left-0 w-full bg-obsidian-800/98 backdrop-blur-xl shadow-2xl border-b border-white/[0.06] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 -translate-y-2 group-hover:translate-y-0">
+            <div className="absolute top-[100%] left-0 w-full bg-white shadow-2xl border-t border-b border-navy-900/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 -translate-y-2 group-hover:translate-y-0">
               <div className="container mx-auto px-6 max-w-7xl py-10">
                 <div className="grid grid-cols-3 gap-12">
                   {Object.entries(categorizedFeatures).map(([category, items]) => (
                     <div key={category} className="space-y-6">
-                      <h3 className="text-white font-heading font-bold text-lg border-b border-white/[0.06] pb-3">
+                      <h3 className="text-navy-900 font-heading font-bold text-lg border-b border-slate-100 pb-3">
                         {category}
                       </h3>
                       <div className="space-y-4">
@@ -78,7 +85,7 @@ export default function Navbar() {
                           <Link
                             key={service.id}
                             href={`/services/${service.id}`}
-                            className="group/link flex items-start gap-4 p-3 -mx-3 rounded-xl hover:bg-white/[0.04] transition-colors"
+                            className="group/link flex items-start gap-4 p-3 -mx-3 rounded-xl hover:bg-slate-50 transition-colors"
                           >
                             <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center shrink-0 text-white shadow-sm transition-transform group-hover/link:scale-110", service.color.startsWith('bg-') ? service.color : '')} style={service.color.startsWith('#') ? {backgroundColor: service.color} : {}}>
                               <div className="w-5 h-5 [&>svg]:w-full [&>svg]:h-full">
@@ -86,10 +93,10 @@ export default function Navbar() {
                               </div>
                             </div>
                             <div>
-                              <h4 className="text-sm font-bold text-white group-hover/link:text-magenta-400 transition-colors mb-1">
+                              <h4 className="text-sm font-bold text-navy-900 group-hover/link:text-electric-600 transition-colors mb-1">
                                 {service.title}
                               </h4>
-                              <p className="text-xs text-navy-400 line-clamp-2 leading-relaxed">
+                              <p className="text-xs text-navy-500 line-clamp-2 leading-relaxed">
                                 {service.description}
                               </p>
                             </div>
@@ -99,27 +106,40 @@ export default function Navbar() {
                     </div>
                   ))}
                 </div>
+                
+
               </div>
             </div>
           </div>
 
           <Link
             href="/open-claw"
-            className="text-sm font-medium transition-colors text-navy-200 hover:text-white"
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-electric-500",
+              isScrolled ? "text-navy-800" : "text-navy-800"
+            )}
           >
             Open Claw
           </Link>
 
           <Link
             href="/#proof"
-            className="text-sm font-medium transition-colors text-navy-200 hover:text-white"
+            className={cn(
+              "text-sm font-medium transition-colors hover:text-electric-500",
+              isScrolled ? "text-navy-800" : "text-navy-800"
+            )}
           >
             Proof
           </Link>
 
           <Link
             href="/contact"
-            className="px-6 py-2.5 rounded-full text-sm font-medium transition-all shadow-md hover:shadow-lg bg-gradient-to-r from-magenta-500 to-magenta-400 text-white hover:shadow-magenta-500/30"
+            className={cn(
+               "px-6 py-2.5 rounded-full text-sm font-medium transition-colors shadow-md hover:shadow-lg",
+               isScrolled 
+                 ? "bg-navy-900 text-white hover:bg-electric-600" 
+                 : "bg-navy-900 text-white hover:bg-electric-600"
+            )}
           >
             Contact Us
           </Link>
@@ -127,7 +147,10 @@ export default function Navbar() {
 
         {/* Mobile Nav Toggle */}
         <button
-          className="lg:hidden p-2 transition-colors text-white"
+          className={cn(
+            "lg:hidden p-2 transition-colors",
+            isScrolled ? "text-navy-900" : "text-navy-900"
+          )}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle menu"
         >
@@ -142,7 +165,7 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden absolute top-full left-0 w-full overflow-hidden bg-obsidian-800/98 backdrop-blur-xl border-b border-white/[0.06] shadow-xl"
+            className="lg:hidden absolute top-full left-0 w-full overflow-hidden bg-white border-b border-navy-900/10 shadow-xl"
           >
             <div className="max-h-[85vh] overflow-y-auto py-4 sm:py-6 px-4 sm:px-6 flex flex-col gap-5 sm:gap-6">
               
@@ -150,7 +173,7 @@ export default function Navbar() {
                 <Link
                   href="/#services"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-lg font-bold text-white block border-b border-white/[0.06] pb-2"
+                  className="text-lg font-bold text-navy-900 block border-b border-slate-100 pb-2"
                 >
                   Solutions
                 </Link>
@@ -162,8 +185,8 @@ export default function Navbar() {
                         onClick={() => setActiveMobileCategory(activeMobileCategory === category ? null : category)}
                         className="flex items-center justify-between w-full text-left"
                       >
-                        <span className="text-sm font-bold text-magenta-400 uppercase tracking-wider">{category}</span>
-                        <ChevronDown className={cn("w-4 h-4 text-magenta-400 transition-transform", activeMobileCategory === category ? "rotate-180" : "")} />
+                        <span className="text-sm font-bold text-electric-600 uppercase tracking-wider">{category}</span>
+                        <ChevronDown className={cn("w-4 h-4 text-electric-600 transition-transform", activeMobileCategory === category ? "rotate-180" : "")} />
                       </button>
                       
                       <AnimatePresence>
@@ -172,7 +195,7 @@ export default function Navbar() {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="flex flex-col gap-4 pt-2 border-l-2 border-white/[0.06] pl-4"
+                            className="flex flex-col gap-4 pt-2 border-l-2 border-slate-100 pl-4"
                           >
                             {items.map((service) => (
                               <Link
@@ -186,7 +209,7 @@ export default function Navbar() {
                                     {service.icon}
                                   </div>
                                 </div>
-                                <span className="text-sm font-medium text-navy-200 group-hover:text-magenta-400">
+                                <span className="text-sm font-medium text-navy-700 group-hover:text-electric-600">
                                   {service.title}
                                 </span>
                               </Link>
@@ -199,12 +222,12 @@ export default function Navbar() {
                 </div>
               </div>
 
-              <div className="h-px bg-white/[0.06] w-full" />
+              <div className="h-px bg-slate-100 w-full"></div>
 
               <Link
                 href="/open-claw"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-lg font-bold text-white block"
+                className="text-lg font-bold text-navy-900 block"
               >
                 Open Claw
               </Link>
@@ -212,7 +235,7 @@ export default function Navbar() {
               <Link
                 href="/#proof"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="text-lg font-bold text-white block"
+                className="text-lg font-bold text-navy-900 block"
               >
                 Proof
               </Link>
@@ -220,9 +243,9 @@ export default function Navbar() {
               <Link
                 href="/contact"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="px-6 py-4 mt-2 rounded-xl bg-gradient-to-r from-magenta-500 to-magenta-400 text-white text-center font-bold hover:shadow-magenta-500/30 transition-shadow shadow-lg"
+                className="px-6 py-4 mt-2 rounded-xl bg-navy-900 text-white text-center font-bold hover:bg-electric-600 transition-colors shadow-lg"
               >
-                Let&apos;s Talk
+                Let's Talk
               </Link>
             </div>
           </motion.div>

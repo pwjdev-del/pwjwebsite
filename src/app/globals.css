@@ -4,7 +4,7 @@
   --font-sans: var(--font-inter);
   --font-heading: var(--font-outfit);
   
-  /* Primary Navy Palette (Legacy) */
+  /* Primary Navy Palette */
   --color-navy-50: #F8FAFC;
   --color-navy-100: #F1F5F9;
   --color-navy-200: #E2E8F0;
@@ -24,31 +24,20 @@
   --color-electric-400: #60A5FA;
   --color-electric-500: #3B82F6;
   --color-electric-600: #2563EB;
-
-  /* Deep Obsidian Palette — Dark Mode Base */
-  --color-obsidian-950: #060810;
-  --color-obsidian-900: #0A0E1A;
-  --color-obsidian-800: #0F1629;
-  --color-obsidian-700: #162040;
-  --color-obsidian-600: #1E2D5A;
-
-  /* Radiant Magenta — CTA & Innovation */
-  --color-magenta-300: #FF6BD6;
-  --color-magenta-400: #FF3CAC;
-  --color-magenta-500: #E91E8C;
-  --color-magenta-600: #C41872;
-
-  /* Sea-Foam Teal — Trust & Compliance */
-  --color-teal-300: #99F6E4;
-  --color-teal-400: #5EEAD4;
-  --color-teal-500: #2DD4BF;
-  --color-teal-600: #0D9488;
 }
 
 /* Global Styles */
 :root {
-  --background: var(--color-obsidian-900);
-  --foreground: #F1F5F9;
+  --background: #FFFFFF;
+  --foreground: var(--color-navy-900);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Forcing dark mode aesthetic for the tech vibe if system prefers it */
+    --background: var(--color-navy-900);
+    --foreground: #FFFFFF;
+  }
 }
 
 html, body {
@@ -65,63 +54,16 @@ body {
 }
 
 /* Base custom utilities */
-@utility glass-dark {
-  background: rgba(15, 22, 41, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+@utility glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 @utility text-gradient {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(135deg, var(--color-magenta-400), var(--color-magenta-300));
-}
-
-@utility text-gradient-teal {
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(135deg, var(--color-teal-400), var(--color-teal-300));
-}
-
-@utility glow-magenta {
-  box-shadow:
-    0 0 20px rgba(255, 60, 172, 0.4),
-    0 0 60px rgba(255, 60, 172, 0.15),
-    0 4px 30px rgba(255, 60, 172, 0.2);
-}
-
-@utility glow-teal {
-  box-shadow:
-    0 0 20px rgba(94, 234, 212, 0.3),
-    0 0 60px rgba(94, 234, 212, 0.1);
-}
-
-/* Network node background animation */
-@keyframes float-node {
-  0%, 100% { transform: translateY(0px) scale(1); opacity: 0.3; }
-  50% { transform: translateY(-20px) scale(1.1); opacity: 0.6; }
-}
-
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.1; }
-  50% { opacity: 0.3; }
-}
-
-@keyframes rotate-view {
-  0%, 30% { opacity: 1; transform: translateY(0); }
-  33%, 63% { opacity: 0; transform: translateY(8px); }
-  66%, 96% { opacity: 0; transform: translateY(8px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+  background-image: linear-gradient(to right, var(--color-electric-400), var(--color-electric-600));
 }
