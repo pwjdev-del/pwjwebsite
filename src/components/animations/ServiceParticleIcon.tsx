@@ -5,45 +5,49 @@ import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { type ISourceOptions } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
 import { motion } from "framer-motion";
+import { useDeviceCapability } from "@/hooks/useDeviceCapability";
 
 interface ServiceParticleIconProps {
   icon: React.ReactNode;
   tailwindBgColor: string;
-  className?: string; // e.g., "w-14 h-14 rounded-2xl" or "w-24 h-24 rounded-3xl"
+  className?: string;
 }
 
 export function ServiceParticleIcon({ icon, tailwindBgColor, className = "w-24 h-24 rounded-3xl" }: ServiceParticleIconProps) {
   const [init, setInit] = useState(false);
   const particleId = useId();
+  const { isMobile, particleScale, prefersReducedMotion } = useDeviceCapability();
 
-  // Extract raw hex from tailwind "bg-[#HEX]" format
   const extractedHex = tailwindBgColor.includes("[") 
     ? tailwindBgColor.split("[")[1].split("]")[0] 
-    : "#60A5FA"; // Fallback blue
+    : "#60A5FA";
 
   useEffect(() => {
+    if (prefersReducedMotion) return;
     initParticlesEngine(async (engine) => {
       await loadSlim(engine);
     }).then(() => {
       setInit(true);
     });
-  }, []);
+  }, [prefersReducedMotion]);
+
+  const scaledParticleCount = isMobile ? 6 : 12;
 
   const options: ISourceOptions = {
     background: {
       color: { value: "transparent" },
     },
-    fpsLimit: 120,
+    fpsLimit: isMobile ? 30 : 120,
     interactivity: {
       events: {
         onHover: {
-          enable: true,
-          mode: ["attract", "repulse"], // Pulls them in closely but agitates them!
+          enable: !isMobile,
+          mode: ["attract", "repulse"],
         },
       },
       modes: {
         attract: {
-          distance: 150, // Larger magnetic pull distance so it grabs cursor easily
+          distance: 150,
           duration: 0.4,
           speed: 2,
           factor: 3,     
@@ -62,16 +66,16 @@ export function ServiceParticleIcon({ icon, tailwindBgColor, className = "w-24 h
         enable: true,
         outModes: { default: "bounce" },
         random: true,
-        speed: { min: 0.5, max: 1.5 }, // Smooth, graceful movement
+        speed: { min: 0.5, max: 1.5 },
         straight: false,
       },
       number: {
         density: { enable: true },
-        value: 12, // Reduced dramatically to prevent blurry blob
+        value: scaledParticleCount,
       },
       opacity: {
         value: { min: 0.2, max: 0.8 },
-        animation: { enable: true, speed: 1.5, sync: false }
+        animation: { enable: !isMobile, speed: 1.5, sync: false }
       },
       shape: { type: "circle" },
       size: {
@@ -88,10 +92,11 @@ export function ServiceParticleIcon({ icon, tailwindBgColor, className = "w-24 h
     detectRetina: true,
   };
 
+  const showParticles = init && particleScale > 0;
+
   return (
     <div className={`relative ${className} ${tailwindBgColor} flex items-center justify-center mb-8 shadow-2xl overflow-hidden group/icon isolate border border-white/20 ring-4 ring-white/5`}>
-      {/* Background Particles Container */}
-      {init && (
+      {showParticles && (
         <div className="absolute inset-0 z-0 opacity-80 mix-blend-screen overflow-hidden">
           <Particles
             id={`tsparticles-${particleId}`}
@@ -101,10 +106,8 @@ export function ServiceParticleIcon({ icon, tailwindBgColor, className = "w-24 h
         </div>
       )}
 
-      {/* Soft central glow behind the icon inside the box */}
       <div className="absolute inset-0 bg-gradient-radial from-white/30 to-transparent opacity-0 group-hover/icon:opacity-100 transition-opacity duration-500 z-10 pointer-events-none"></div>
 
-      {/* Actual Icon positioned absolutely at the center over the particles */}
       <motion.div 
         className="relative z-20 text-white pointer-events-none drop-shadow-xl"
         whileHover={{ scale: 1.25, rotate: 10 }}

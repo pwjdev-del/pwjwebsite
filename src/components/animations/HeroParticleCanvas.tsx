@@ -1,11 +1,13 @@
 "use client";
 
 import { useRef, useEffect, useCallback } from "react";
+import { useDeviceCapability } from "@/hooks/useDeviceCapability";
 
 export default function HeroParticleCanvas({ color }: { color: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const animRef = useRef<number>(0);
+  const { isMobile, particleScale, prefersReducedMotion } = useDeviceCapability();
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     const canvas = canvasRef.current;
@@ -29,7 +31,11 @@ export default function HeroParticleCanvas({ color }: { color: string }) {
     };
     resize();
     window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", handleMouseMove);
+
+    // Skip mouse tracking on mobile (no hover)
+    if (!isMobile) {
+      window.addEventListener("mousemove", handleMouseMove);
+    }
 
     const hexToRgb = (hex: string) => {
       const map: Record<string, string> = {
@@ -49,27 +55,47 @@ export default function HeroParticleCanvas({ color }: { color: string }) {
     };
     const rgb = hexToRgb(color);
 
-    const particleCount = 90;
+    // Scale particle count by device capability
+    const particleCount = Math.round(90 * Math.max(particleScale, 0.15));
+    const connectionDistance = isMobile ? 80 : 140;
+
     const particles = Array.from({ length: particleCount }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 1.2,
-      vy: (Math.random() - 0.5) * 1.2,
+      vx: (Math.random() - 0.5) * (isMobile ? 0.6 : 1.2),
+      vy: (Math.random() - 0.5) * (isMobile ? 0.6 : 1.2),
       size: Math.random() * 2.5 + 1,
       opacity: Math.random() * 0.5 + 0.2,
     }));
+
+    // If reduced motion, draw static dots once and stop
+    if (prefersReducedMotion) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const p of particles) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${p.opacity})`;
+        ctx.fill();
+      }
+      return () => {
+        window.removeEventListener("resize", resize);
+      };
+    }
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       for (const p of particles) {
-        const dx = p.x - mouseRef.current.x;
-        const dy = p.y - mouseRef.current.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 150 && dist > 0) {
-          const force = (150 - dist) / 150;
-          p.vx += (dx / dist) * force * 0.3;
-          p.vy += (dy / dist) * force * 0.3;
+        // Mouse interaction only on desktop
+        if (!isMobile) {
+          const dx = p.x - mouseRef.current.x;
+          const dy = p.y - mouseRef.current.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 150 && dist > 0) {
+            const force = (150 - dist) / 150;
+            p.vx += (dx / dist) * force * 0.3;
+            p.vy += (dy / dist) * force * 0.3;
+          }
         }
 
         p.x += p.vx;
@@ -88,16 +114,17 @@ export default function HeroParticleCanvas({ color }: { color: string }) {
         ctx.fill();
       }
 
+      // Connection lines — reduced distance on mobile
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 140) {
+          if (dist < connectionDistance) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.15 * (1 - dist / 140)})`;
+            ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${0.15 * (1 - dist / connectionDistance)})`;
             ctx.lineWidth = 0.8;
             ctx.stroke();
           }
@@ -111,9 +138,11 @@ export default function HeroParticleCanvas({ color }: { color: string }) {
     return () => {
       cancelAnimationFrame(animRef.current);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", handleMouseMove);
+      if (!isMobile) {
+        window.removeEventListener("mousemove", handleMouseMove);
+      }
     };
-  }, [color, handleMouseMove]);
+  }, [color, handleMouseMove, isMobile, particleScale, prefersReducedMotion]);
 
   return <canvas ref={canvasRef} className="absolute inset-0 z-[1] pointer-events-none" />;
 }

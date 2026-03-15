@@ -38,7 +38,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} ${outfit.variable} font-sans antialiased text-navy-900 bg-white selection:bg-electric-500 selection:text-white`}>
+      <body className={`${inter.variable} ${outfit.variable} font-sans antialiased text-navy-100 bg-obsidian-900 selection:bg-magenta-500 selection:text-white`}>
         <LocalBusinessSchema />
         <div className="min-h-screen flex flex-col pt-16 md:pt-20">
           <header>
