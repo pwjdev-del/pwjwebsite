@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Gradient Definition -->
+  <defs>
+    <linearGradient id="electric-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" /> <!-- electric-400 equivalent -->
+      <stop offset="100%" stop-color="#0284c7" /> <!-- electric-600 equivalent -->
+    </linearGradient>
+  </defs>
+
+  <!-- Background Box (Rounded) -->
+  <rect x="5" y="5" width="90" height="90" rx="20" fill="url(#electric-gradient)" />
+
+  <!-- Text -->
+  <text x="50" y="56" 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="36" 
+        font-weight="bold" 
+        fill="white" 
+        text-anchor="middle" 
+        dominant-baseline="middle"
+        letter-spacing="2">
+    PWJ
+  </text>
+</svg>
