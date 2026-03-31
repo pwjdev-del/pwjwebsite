@@ -17,10 +17,11 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   ...defaultMetadata,
+  verification: { google: "BZRKxtTySuTebuM3d3Z7rm4jXKs4nSyPv0JO2c444fE" },
   openGraph: {
     title: defaultMetadata.title.default,
     description: defaultMetadata.description,
-    url: "https://purewavejosh.com", 
+    url: "https://mypwj.com", 
     siteName: "Purewave Josh LLC",
     type: "website",
   },
