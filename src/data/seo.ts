@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "Purewave Josh LLC",
-  url: "https://purewavejosh.com",
+  url: "https://mypwj.com",
   phone: "(941) 555-0199",
   email: "pwjdev@gmail.com",
   region: "Florida, US",
