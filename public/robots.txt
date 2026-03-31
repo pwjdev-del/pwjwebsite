@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://purewavejosh.com/sitemap.xml
+Sitemap: https://mypwj.com/sitemap.xml
