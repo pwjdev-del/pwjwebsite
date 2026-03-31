@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { features } from '@/data/features';
 import { industries } from '@/data/industries';
+import { blogPosts } from '@/data/blog-posts';
 import { siteConfig } from '@/data/seo';
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -15,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/hipaa',
     '/privacy',
     '/terms',
+    '/blog',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date().toISOString(),
@@ -38,5 +40,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }));
 
-  return [...staticRoutes, ...serviceRoutes, ...industryRoutes];
+  // Blog post routes
+  const blogRoutes = blogPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: post.date,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...serviceRoutes, ...industryRoutes, ...blogRoutes];
 }
